@@ -179,6 +179,19 @@ async function createClaudeConfig(options = {}) {
   }
   
   // Get template configuration
+  // Ensure language is set (fallback for interactive mode bug)
+  if (!config.language) {
+    console.log('⚠️  WARNING: config.language is undefined, attempting to recover...');
+    console.log('🐛 DEBUG: Full config object =', JSON.stringify(config, null, 2));
+    // Check if language was selected but stored incorrectly
+    if (projectInfo && projectInfo.detectedLanguage) {
+      config.language = projectInfo.detectedLanguage;
+      console.log('✅ Recovered language from projectInfo:', config.language);
+    } else {
+      config.language = 'common';
+      console.log('✅ Fallback to common language');
+    }
+  }
   const templateConfig = getTemplateConfig(config);
   
   // Add selected hooks to template config
