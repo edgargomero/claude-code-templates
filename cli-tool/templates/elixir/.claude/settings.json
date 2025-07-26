@@ -1,0 +1,157 @@
+{
+  "description": "Elixir/Phoenix project automation settings for Claude Code",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "name": "Elixir Syntax Check",
+        "pattern": "**/*.{ex,exs}",
+        "description": "Validates Elixir syntax before making code changes",
+        "enabled": true,
+        "hooks": [
+          {
+            "condition": "file:change",
+            "pattern": "\\.(ex|exs)$",
+            "command": "mix compile --warnings-as-errors",
+            "runInBackground": true,
+            "outputHandling": "ignore-if-success"
+          }
+        ]
+      },
+      {
+        "name": "Migration Safety Check", 
+        "pattern": "**/migrations/*.exs",
+        "description": "Validates migration files for safety",
+        "enabled": true,
+        "hooks": [
+          {
+            "condition": "file:create",
+            "pattern": "migrations/.*\\.exs$",
+            "command": "echo 'New migration detected. Remember to review for data safety!'",
+            "outputHandling": "show-always"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "name": "Mix Format",
+        "pattern": "**/*.{ex,exs}",
+        "description": "Automatically formats Elixir code after changes",
+        "enabled": true,
+        "hooks": [
+          {
+            "condition": "file:modified",
+            "pattern": "\\.(ex|exs)$",
+            "command": "mix format {{file}}",
+            "runInBackground": true,
+            "outputHandling": "ignore-if-success"
+          }
+        ]
+      },
+      {
+        "name": "Run Related Tests",
+        "pattern": "lib/**/*.ex",
+        "description": "Runs tests related to modified files",
+        "enabled": true,
+        "hooks": [
+          {
+            "condition": "file:modified",
+            "pattern": "lib/(.+)\\.ex$",
+            "command": "mix test test/$1_test.exs",
+            "runInBackground": true,
+            "outputHandling": "show-if-error"
+          }
+        ]
+      },
+      {
+        "name": "Credo Analysis",
+        "pattern": "**/*.{ex,exs}",
+        "description": "Runs Credo static analysis on modified files",
+        "enabled": false,
+        "hooks": [
+          {
+            "condition": "file:modified",
+            "pattern": "\\.(ex|exs)$",
+            "command": "mix credo suggest {{file}}",
+            "runInBackground": true,
+            "outputHandling": "show-if-error"
+          }
+        ]
+      },
+      {
+        "name": "Update Route Info",
+        "pattern": "**/router.ex",
+        "description": "Updates route information after router changes",
+        "enabled": true,
+        "hooks": [
+          {
+            "condition": "file:modified",
+            "pattern": "router\\.ex$",
+            "command": "mix phx.routes > .routes.txt",
+            "runInBackground": true,
+            "outputHandling": "ignore"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "name": "Final Test Suite",
+        "description": "Runs the complete test suite before finishing",
+        "enabled": false,
+        "hooks": [
+          {
+            "command": "mix test",
+            "outputHandling": "show-always"
+          }
+        ]
+      },
+      {
+        "name": "Format Check",
+        "description": "Ensures all files are properly formatted",
+        "enabled": true,
+        "hooks": [
+          {
+            "command": "mix format --check-formatted",
+            "outputHandling": "show-if-error"
+          }
+        ]
+      },
+      {
+        "name": "Compilation Check",
+        "description": "Ensures the project compiles without warnings",
+        "enabled": true,
+        "hooks": [
+          {
+            "command": "mix compile --warnings-as-errors",
+            "outputHandling": "show-if-error"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "name": "Elixir Activity Logger",
+        "description": "Logs Elixir development activities",
+        "enabled": false,
+        "hooks": [
+          {
+            "command": "echo '[{{timestamp}}] Elixir development activity' >> .claude-activity.log",
+            "runInBackground": true,
+            "outputHandling": "ignore"
+          }
+        ]
+      }
+    ]
+  },
+  "customSettings": {
+    "elixir": {
+      "defaultTestFramework": "ExUnit",
+      "preferredFormatter": "mix format",
+      "enableDialyzer": false,
+      "enableCredo": true,
+      "phoenixLiveReload": true,
+      "defaultDatabaseAdapter": "postgres"
+    }
+  }
+}

@@ -104,6 +104,31 @@ const TEMPLATES_CONFIG = {
       }
     }
   },
+  'elixir': {
+    name: 'Elixir',
+    description: 'Optimized for Elixir/Phoenix development with OTP principles',
+    files: [
+      { source: 'elixir/CLAUDE.md', destination: 'CLAUDE.md' },
+      { source: 'elixir/.claude', destination: '.claude' },
+      { source: 'elixir/.claude/settings.json', destination: '.claude/settings.json' },
+      { source: 'elixir/.mcp.json', destination: '.mcp.json' },
+      { source: 'elixir/.claude/commands', destination: '.claude/commands' }
+    ],
+    frameworks: {
+      'phoenix': {
+        name: 'Phoenix Framework',
+        additionalFiles: []
+      },
+      'phoenix-liveview': {
+        name: 'Phoenix LiveView',
+        additionalFiles: []
+      },
+      'nerves': {
+        name: 'Nerves (IoT)',
+        additionalFiles: []
+      }
+    }
+  },
   'rust': {
     name: 'Rust',
     description: 'Optimized for Rust development',

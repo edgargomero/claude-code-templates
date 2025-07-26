@@ -4,332 +4,247 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Node.js CLI tool for setting up Claude Code configurations and providing real-time analytics. The project uses modern JavaScript/Node.js development practices and includes a comprehensive analytics dashboard with modular architecture.
+This is a monorepo containing a CLI tool for configuring Claude Code and a documentation website. The main focus is the **Claude Code Templates** CLI tool that provides real-time analytics dashboards, health checks, and automated project setup for Claude Code configurations.
+
+## Architecture
+
+### Monorepo Structure
+- **CLI Tool** (`/cli-tool`) - Node.js CLI application with analytics dashboard
+- **Documentation** (`/docu`) - Docusaurus-based documentation website  
+- **GitHub Pages** (`/docs`) - Static site deployment
+
+### CLI Tool Architecture
+- **Modular Analytics System**: StateCalculator, ProcessDetector, ConversationAnalyzer, FileWatcher, DataCache
+- **Real-time Dashboard**: WebSocket server with live conversation monitoring
+- **Multi-alias CLI**: 8 different command aliases (cct, claude-init, etc.)
+- **Framework Templates**: Language-specific CLAUDE.md templates and configurations
 
 ## Development Commands
 
-### Package Management
-- `npm install` - Install all dependencies
-- `npm install --save <package>` - Install a production dependency
-- `npm install --save-dev <package>` - Install a development dependency
-- `npm update` - Update all dependencies
-- `npm audit` - Check for security vulnerabilities
-- `npm audit fix` - Fix security vulnerabilities
-
-### Application Commands
-- `npm start` - Run the CLI tool
-- `npm run analytics:start` - Start the analytics dashboard server
-- `npm run analytics:test` - Run analytics-specific tests
-- `node src/analytics.js` - Direct analytics server startup
-
-### Testing Commands
-- `npm test` - Run all tests with Jest
-- `npm run test:watch` - Run tests in watch mode
-- `npm run test:coverage` - Run tests with coverage report
-- `npm run test:unit` - Run unit tests only
-- `npm run test:integration` - Run integration tests only
-- `npm run test:e2e` - Run end-to-end tests
-- `npm run test:analytics` - Run analytics module tests
-- `npm run test:all` - Run comprehensive test suite
-
-### Code Quality Commands
-- `npm run lint` - Run ESLint (if configured)
-- `npm run format` - Format code (if configured)
-- `node --check src/analytics.js` - Check syntax
-
-### Development Tools
-- `npm run dev:link` - Link package for local development
-- `npm run dev:unlink` - Unlink package
-- `npm version patch|minor|major` - Bump version
-- `npm publish` - Publish to npm registry
-
-## Analytics Dashboard
-
-### Quick Start
+### CLI Tool Development (`/cli-tool`)
 ```bash
-# Start the analytics dashboard
-npm run analytics:start
+# Package management
+npm install                    # Install dependencies
+npm run dev:link              # Link for local development testing
+npm run dev:unlink            # Unlink development package
 
-# Open browser to http://localhost:3333
-# The dashboard provides real-time monitoring of Claude Code sessions
+# Application execution
+npm start                     # Run CLI tool interactively
+npm run analytics:start       # Start analytics dashboard (port 3333)
+node src/analytics.js         # Direct analytics server startup
+
+# Testing commands  
+npm test                      # Run all Jest tests
+npm run test:watch            # Watch mode testing
+npm run test:coverage         # Coverage report (70%+ required)
+npm run test:unit             # Unit tests only
+npm run test:integration      # Integration tests only
+npm run test:e2e              # End-to-end tests
+npm run test:analytics        # Analytics-specific tests
+npm run test:all              # Comprehensive test suite with Makefile
+
+# Shell-based testing
+npm run test:commands         # CLI command testing (test-commands.sh)
+npm run test:detailed         # Detailed CLI testing (test-detailed.sh)
+
+# Makefile testing scenarios
+make test-react               # Test React template configuration
+make test-vue                 # Test Vue template configuration  
+make test-node                # Test Node.js template configuration
+make test-hooks               # Test automation hooks functionality
+make test-python-hooks        # Test Python-specific hooks
+make pre-publish              # Complete test suite before publishing
 ```
 
-### Key Features
-- **Real-time Session Monitoring** - Live tracking of active Claude Code conversations
-- **Conversation State Detection** - "Claude working...", "User typing...", "Awaiting input..."
-- **Performance Analytics** - System health, memory usage, and performance metrics
-- **WebSocket Integration** - Real-time updates without polling
-- **Export Capabilities** - CSV/JSON export of conversation data
-- **Browser Notifications** - Desktop alerts for state changes
-
-### Architecture
-The analytics dashboard follows a modular architecture with:
-- **Backend Modules**: StateCalculator, ProcessDetector, ConversationAnalyzer, FileWatcher, DataCache
-- **Frontend Components**: Dashboard, ConversationTable, Charts, Services
-- **Real-time Communication**: WebSocket server with notification management
-- **Performance Monitoring**: Comprehensive metrics and health monitoring
-- **Testing Framework**: Unit, integration, and performance tests
-
-## Technology Stack
-
-### Core Technologies
-- **Node.js** - Runtime environment (v14.0.0+)
-- **Express.js** - Web server framework
-- **WebSocket** - Real-time communication (ws library)
-- **Chokidar** - File system watching
-- **Jest** - Testing framework
-
-### Frontend Technologies
-- **Vanilla JavaScript** - No framework dependencies for maximum compatibility
-- **Chart.js** - Data visualization
-- **WebSocket Client** - Real-time updates
-- **CSS3** - Modern styling with responsive design
-
-### Development Tools
-- **fs-extra** - Enhanced file system operations
-- **chalk** - Terminal string styling
-- **boxen** - Terminal boxes
-- **commander** - CLI argument parsing
-- **inquirer** - Interactive command line prompts
-
-### CLI Dependencies
-- **commander** - Command-line interface framework
-- **inquirer** - Interactive command line prompts
-- **ora** - Terminal spinners
-- **boxen** - Terminal boxes for notifications
-- **open** - Cross-platform file opener
-
-### Analytics Dependencies
-- **express** - Web server framework
-- **ws** - WebSocket library for real-time communication
-- **chokidar** - File system watcher
-- **fs-extra** - Enhanced file system operations
-- **chalk** - Terminal string styling
-
-### Testing Framework
-- **Jest** - JavaScript testing framework
-- **jest-watch-typeahead** - Interactive test watching
-- Comprehensive test coverage with unit, integration, and performance tests
-
-### Code Quality Tools
-- **ESLint** - JavaScript linting (if configured)
-- **Prettier** - Code formatting (if configured)
-- **Node.js built-in** - Syntax checking with `node --check`
-
-## Project Structure Guidelines
-
-### File Organization
-```
-src/
-├── index.js             # CLI entry point
-├── analytics.js         # Analytics dashboard server
-├── analytics/           # Analytics modules
-│   ├── core/           # Core business logic
-│   │   ├── StateCalculator.js
-│   │   ├── ProcessDetector.js
-│   │   ├── ConversationAnalyzer.js
-│   │   └── FileWatcher.js
-│   ├── data/           # Data management
-│   │   └── DataCache.js
-│   ├── notifications/   # Real-time communication
-│   │   ├── WebSocketServer.js
-│   │   └── NotificationManager.js
-│   └── utils/          # Utilities
-│       └── PerformanceMonitor.js
-├── analytics-web/       # Frontend components
-│   ├── index.html      # Main dashboard page
-│   ├── components/     # UI components
-│   ├── services/       # Frontend services
-│   └── assets/         # Static assets
-├── templates/           # Configuration templates
-└── utils/              # CLI utilities
-tests/
-├── unit/               # Unit tests
-├── integration/        # Integration tests
-├── e2e/               # End-to-end tests
-└── fixtures/          # Test data
+### Documentation Development (`/docu`)
+```bash
+cd docu
+npm install                   # Install Docusaurus dependencies
+npm start                     # Start development server
+npm run build                 # Build static site
+npm run serve                 # Serve built site locally
+npm run typecheck             # TypeScript type checking
 ```
 
-### Naming Conventions
-- **Files/Modules**: Use PascalCase for classes (`StateCalculator.js`), camelCase for utilities
-- **Classes**: Use PascalCase (`StateCalculator`)
-- **Functions/Variables**: Use camelCase (`getUserData`)
-- **Constants**: Use UPPER_SNAKE_CASE (`API_BASE_URL`)
-- **Private methods**: Prefix with underscore (`_privateMethod`)
-
-## Node.js Guidelines
-
-### Module Organization
-- Use CommonJS modules (`module.exports`, `require()`)
-- Organize related functionality into classes
-- Keep modules focused and single-purpose
-- Use dependency injection for testability
-- Document public APIs with JSDoc comments
-
-### Code Style
-- Use meaningful variable and function names
-- Keep functions focused and single-purpose
-- Use async/await for asynchronous operations
-- Handle errors appropriately with try/catch blocks
-- Use console logging with appropriate levels (chalk for styling)
-
-### Best Practices
-- Use `fs-extra` for enhanced file operations
-- Prefer `path.join()` for cross-platform path handling
-- Use async/await instead of callbacks where possible
-- Handle process signals for graceful shutdown
-- Use environment variables for configuration
-
-## Testing Standards
-
-### Test Structure
-- Organize tests to mirror source code structure
-- Use descriptive test names that explain the behavior
-- Follow AAA pattern (Arrange, Act, Assert)
-- Use Jest fixtures and mocks for test data
-- Group related tests in `describe` blocks
-
-### Test Categories
-- **Unit Tests** - Test individual modules and functions in isolation
-- **Integration Tests** - Test module interactions and complete workflows
-- **Performance Tests** - Test system performance and memory usage
-- **E2E Tests** - Test complete user scenarios end-to-end
+## Testing Architecture
 
 ### Jest Configuration
-```javascript
-// jest.config.js
-module.exports = {
-  testEnvironment: 'node',
-  collectCoverageFrom: [
-    'src/**/*.js',
-    '!src/**/*.test.js'
-  ],
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70
-    }
-  }
-};
-```
+- **Framework**: Jest 30.0.4 with watch plugins
+- **Structure**: Unit (`/tests/unit`), Integration (`/tests/integration`), E2E (`/tests/e2e`)
+- **Coverage Goals**: 70% global, 80% for analytics core modules
+- **Mocking**: WebSocket, localStorage, DOM APIs for comprehensive testing
 
-### Coverage Goals
-- Aim for 70%+ overall test coverage (80%+ for core modules)
-- Write unit tests for business logic
-- Use integration tests for module interactions
-- Mock external dependencies and services
-- Test error conditions and edge cases
+### Shell Testing Scripts
+- **`test-commands.sh`**: CLI command validation and argument testing
+- **`test-detailed.sh`**: Comprehensive scenario testing with real project setups
+- **Makefile**: Framework-specific testing scenarios with temporary directories
 
-### Test Examples
-```javascript
-// Unit test example
-describe('StateCalculator', () => {
-  let stateCalculator;
-  
-  beforeEach(() => {
-    stateCalculator = new StateCalculator();
-  });
-  
-  it('should detect active state for recent messages', () => {
-    const messages = [/* test data */];
-    const lastModified = new Date();
-    
-    const state = stateCalculator.determineConversationState(messages, lastModified);
-    
-    expect(state).toBe('active');
-  });
-});
-```
-
-## Dependency Management
-
-### Node.js Environment Setup
+### Testing Workflow
 ```bash
-# Ensure Node.js 14+ is installed
-node --version
+# Before development
+npm run dev:link              # Link package locally
+npm test                      # Verify existing functionality
 
-# Install dependencies
-npm install
+# During development  
+npm run test:watch            # Continuous testing
+npm run analytics:start       # Test dashboard functionality
 
-# Install development dependencies
-npm install --save-dev jest
-
-# Link for local development
-npm link
+# Before committing
+npm run test:coverage         # Ensure 70%+ coverage
+make test                     # Run all Makefile scenarios
 ```
 
-### Package Management Best Practices
-- Use `package.json` for dependency management
-- Pin major versions to avoid breaking changes
-- Use `npm audit` to check for security vulnerabilities
-- Keep dependencies up to date with `npm update`
+## Analytics Dashboard System
 
-## Analytics Modular Architecture
+### Core Architecture
+The analytics system provides real-time monitoring of Claude Code sessions:
 
-### Implementation Details
-The analytics dashboard has been refactored into a modular architecture in 4 phases:
+**Backend Modules**:
+- **StateCalculator**: Conversation state detection ("Claude working...", "User typing...")
+- **ProcessDetector**: Running process detection and correlation with Claude Code
+- **ConversationAnalyzer**: Parse .jsonl files and extract conversation data
+- **FileWatcher**: Real-time file system monitoring with chokidar
+- **DataCache**: Multi-level caching system for performance optimization
 
-#### Phase 1: Backend Modularization
-- **StateCalculator** - Conversation state detection logic
-- **ProcessDetector** - Running process detection and correlation
-- **ConversationAnalyzer** - Message parsing and analysis
-- **FileWatcher** - Real-time file system monitoring
-- **DataCache** - Multi-level caching system
+**Frontend Components**:
+- **Dashboard**: Main orchestration component with real-time updates
+- **ConversationTable**: Interactive conversation display with export capabilities
+- **Charts**: Data visualization using Chart.js
+- **WebSocketService**: Real-time communication with fallback to polling
 
-#### Phase 2: Frontend Modularization  
-- **Dashboard** - Main component orchestration
-- **ConversationTable** - Interactive conversation display
-- **Charts** - Data visualization components
-- **StateService** - Reactive state management
-- **DataService** - API communication with caching
-- **WebSocketService** - Real-time communication
+### WebSocket Communication Flow
+```
+Claude Code writes → .jsonl file changes → FileWatcher detects → 
+handleConversationChange → notifyNewMessage → WebSocketServer.broadcast → 
+Frontend WebSocketService → Dashboard updates UI
+```
 
-#### Phase 3: Real-time Communication
-- **WebSocketServer** - Server-side WebSocket management
-- **NotificationManager** - Event-driven notifications
-- **Real-time Updates** - Live conversation state changes
-- **Fallback Mechanisms** - Polling when WebSocket unavailable
+### Analytics Server
+```bash
+npm run analytics:start       # Starts on http://localhost:3333
+# Features: Real-time session tracking, conversation history, export capabilities
+```
 
-#### Phase 4: Testing & Performance
-- **Comprehensive Test Suite** - Unit, integration, and performance tests
-- **PerformanceMonitor** - System health and metrics tracking
-- **Memory Management** - Automatic cleanup and optimization
-- **Production Readiness** - Performance monitoring and error tracking
+## CLI Tool Features
 
-## Security Guidelines
+### Multi-Alias Support
+All these commands work identically:
+```bash
+npx claude-code-templates     # Primary package name
+npx cct                       # Short form (3 letters)
+npx claude-init               # Init-style command
+npx create-claude-config      # Create-style command
+```
 
-### Dependencies
-- Regularly update dependencies with `npm audit` and `npm update`
-- Use `npm audit` to check for known vulnerabilities
-- Pin major versions in package.json to avoid breaking changes
-- Use environment variables for sensitive configuration
+### Command Categories
+- **Interactive Setup**: Framework detection and optimal configuration
+- **Health Checks**: Comprehensive system validation and diagnostics  
+- **Analytics**: Real-time monitoring and usage statistics
+- **Analysis Tools**: Command stats, hook analysis, MCP server analysis
 
-### Code Security
-- Validate input data appropriately
-- Use environment variables for API keys and configuration
-- Implement proper error handling without exposing sensitive information
-- Sanitize file paths and user inputs
-- Use HTTPS for production deployments
+## Template System Architecture
 
-## Development Workflow
+### Language Support Structure
+```
+templates/
+├── common/                   # Universal configurations
+├── javascript-typescript/    # JS/TS with React, Vue, Angular, Node.js
+├── python/                   # Django, Flask, FastAPI
+├── go/                       # Future: Gin, Echo, Fiber  
+├── ruby/                     # Future: Rails, Sinatra
+└── rust/                     # Future: Axum, Warp, Actix
+```
 
-### Before Starting
-1. Check Node.js version compatibility (14.0.0+)
-2. Run `npm install` to install dependencies
-3. Check syntax with `node --check src/analytics.js`
-4. Run initial tests with `npm test`
+### Template Components
+Each language template includes:
+- **CLAUDE.md**: Framework-specific development guidance
+- **settings.json**: Automation hooks configuration
+- **commands/**: Custom slash commands for common tasks
+- **.mcp.json**: Model Context Protocol server configurations
 
-### During Development
-1. Use meaningful variable and function names
-2. Run tests frequently to catch issues early: `npm run test:watch`
-3. Test analytics dashboard: `npm run analytics:start`
-4. Use meaningful commit messages
+## Node.js Development Guidelines
 
-### Before Committing
-1. Run full test suite: `npm test`
-2. Check syntax: `node --check src/analytics.js`
-3. Test analytics functionality: `npm run analytics:test`
-4. Ensure no console errors in browser (if testing frontend)
-5. Run performance tests if available
+### Module Organization
+- **CommonJS Modules**: Use `module.exports` and `require()`
+- **Class-based Architecture**: PascalCase classes (StateCalculator, ProcessDetector)
+- **Dependency Injection**: For testability and modularity
+- **JSDoc Documentation**: Document public APIs
+
+### Code Conventions
+- **Files/Modules**: PascalCase for classes, camelCase for utilities
+- **Functions/Variables**: camelCase (getUserData, handleConversationChange)
+- **Constants**: UPPER_SNAKE_CASE (API_BASE_URL, DEFAULT_PORT)
+- **Private Methods**: Underscore prefix (_privateMethod)
+
+### Async/Await Patterns
+```javascript
+// File operations
+const content = await fs.readFile(filePath, 'utf8');
+
+// WebSocket handling
+server.on('connection', async (ws) => {
+  await handleConnection(ws);
+});
+
+// Error handling
+try {
+  const result = await processConversation(data);
+} catch (error) {
+  console.error('Processing failed:', error.message);
+}
+```
+
+## Performance and Security
+
+### Performance Optimization
+- **File Watching**: Efficient chokidar configuration with debouncing
+- **WebSocket Management**: Connection pooling and cleanup
+- **Memory Management**: Automatic cache cleanup and optimization
+- **Caching Strategy**: Multi-level caching for conversation data
+
+### Security Practices
+- **Input Validation**: Sanitize file paths and user inputs
+- **Environment Variables**: Sensitive configuration management
+- **Dependency Auditing**: Regular `npm audit` and updates
+- **Error Handling**: Prevent sensitive information exposure
+
+## Deployment and Distribution
+
+### NPM Package Configuration
+- **Package Name**: `claude-code-templates`
+- **Version**: Semantic versioning (currently 1.11.0)
+- **Node Requirement**: >=14.0.0
+- **Files Included**: bin/, src/, templates/, README.md
+
+### Release Process
+```bash
+# Pre-publish validation
+npm run test:coverage         # Ensure 70%+ test coverage
+make pre-publish              # Complete test suite
+npm version patch|minor|major # Bump version
+npm publish                   # Publish to npm registry
+```
+
+### Documentation Deployment
+```bash
+cd docu
+npm run build                 # Build Docusaurus site
+npm run deploy                # Deploy to GitHub Pages
+```
+
+## Troubleshooting Common Issues
+
+### CLI Development Issues
+- **Link Issues**: Use `npm run dev:unlink` then `npm run dev:link`
+- **Test Failures**: Verify Node.js >=14.0.0 and clean npm install
+- **Analytics Server**: Check port 3333 availability, firewall settings
+
+### Testing Issues
+- **Makefile Tests**: Ensure package is linked with `make install-dev`
+- **Coverage Failures**: Focus on analytics core modules (StateCalculator, ProcessDetector)
+- **WebSocket Tests**: Mock WebSocket connections for CI/CD environments
+
+### Template Generation Issues
+- **Framework Detection**: Verify package.json and project structure
+- **File Permissions**: Ensure write permissions for .claude/ directory creation
+- **Backup Failures**: Check available disk space for automatic backups

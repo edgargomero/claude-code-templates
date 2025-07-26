@@ -104,6 +104,38 @@ async function detectProject(targetDir) {
     }
   }
   
+  // Check for Elixir files
+  const elixirFiles = await findFilesByExtension(targetDir, ['.ex', '.exs']);
+  const mixPath = path.join(targetDir, 'mix.exs');
+  if (elixirFiles.length > 0 || await fs.pathExists(mixPath)) {
+    detectedLanguages.push('elixir');
+    
+    // Check for Elixir frameworks
+    if (await fs.pathExists(mixPath)) {
+      try {
+        const mixFile = await fs.readFile(mixPath, 'utf-8');
+        if (mixFile.includes(':phoenix') || mixFile.includes('"phoenix"')) {
+          detectedFrameworks.push('phoenix');
+          if (mixFile.includes(':phoenix_live_view') || mixFile.includes('"phoenix_live_view"')) {
+            detectedFrameworks.push('phoenix-liveview');
+          }
+        }
+        if (mixFile.includes(':nerves') || mixFile.includes('"nerves"')) {
+          detectedFrameworks.push('nerves');
+        }
+      } catch (error) {
+        console.warn('Could not parse mix.exs');
+      }
+    }
+    
+    // Check for Phoenix router
+    const routerPath = path.join(targetDir, 'lib', '*_web', 'router.ex');
+    const phoenixDirs = await findFilesByPattern(targetDir, '*_web/router.ex');
+    if (phoenixDirs.length > 0) {
+      detectedFrameworks.push('phoenix');
+    }
+  }
+  
   // Check for Rust files
   const rustFiles = await findFilesByExtension(targetDir, ['.rs']);
   const cargoPath = path.join(targetDir, 'Cargo.toml');

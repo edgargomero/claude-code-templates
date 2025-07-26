@@ -1,0 +1,167 @@
+{
+  "mcpServers": {
+    "elixir-ls": {
+      "command": "elixir-ls",
+      "args": [],
+      "env": {
+        "MIX_ENV": "dev"
+      },
+      "description": "Elixir Language Server for IDE features like autocomplete, go-to-definition, and diagnostics",
+      "enabled": true,
+      "category": "IDE",
+      "complexity": "medium",
+      "installation": "Download from https://github.com/elixir-lsp/elixir-ls/releases"
+    },
+    "mix-tasks": {
+      "command": "mix",
+      "args": ["help"],
+      "env": {},
+      "description": "Mix build tool for task execution, dependency management, and project compilation",
+      "enabled": true,
+      "category": "Build",
+      "complexity": "low"
+    },
+    "iex-shell": {
+      "command": "iex",
+      "args": ["-S", "mix"],
+      "env": {
+        "MIX_ENV": "dev"
+      },
+      "description": "Interactive Elixir shell with project context loaded",
+      "enabled": true,
+      "category": "REPL",
+      "complexity": "low"
+    },
+    "phoenix-server": {
+      "command": "mix",
+      "args": ["phx.server"],
+      "env": {
+        "MIX_ENV": "dev",
+        "PORT": "4000"
+      },
+      "description": "Phoenix development server with live reload",
+      "enabled": true,
+      "category": "Web",
+      "complexity": "low"
+    },
+    "ecto-db": {
+      "command": "mix",
+      "args": ["ecto"],
+      "env": {},
+      "description": "Ecto database toolkit for migrations, queries, and schema management",
+      "enabled": true,
+      "category": "Database",
+      "complexity": "medium"
+    },
+    "livebook": {
+      "command": "livebook",
+      "args": ["server"],
+      "env": {
+        "LIVEBOOK_PORT": "8080",
+        "LIVEBOOK_HOME": "./notebooks"
+      },
+      "description": "Livebook interactive notebook environment for Elixir",
+      "enabled": false,
+      "category": "IDE",
+      "complexity": "medium",
+      "installation": "mix escript.install hex livebook"
+    },
+    "credo-analysis": {
+      "command": "mix",
+      "args": ["credo", "--strict"],
+      "env": {},
+      "description": "Credo static code analysis for code consistency and quality",
+      "enabled": true,
+      "category": "Code Quality",
+      "complexity": "low"
+    },
+    "dialyzer": {
+      "command": "mix",
+      "args": ["dialyzer"],
+      "env": {},
+      "description": "Dialyzer static analysis tool for type checking",
+      "enabled": false,
+      "category": "Code Quality", 
+      "complexity": "high",
+      "installation": "First run: mix dialyzer --plt"
+    },
+    "observer": {
+      "command": "erl",
+      "args": ["-name", "observer@localhost", "-setcookie", "dev", "-run", "observer"],
+      "env": {},
+      "description": "Erlang Observer for system monitoring and debugging",
+      "enabled": false,
+      "category": "Debugging",
+      "complexity": "medium"
+    },
+    "hex-packages": {
+      "command": "mix",
+      "args": ["hex.info"],
+      "env": {},
+      "description": "Hex package manager for searching and managing dependencies",
+      "enabled": true,
+      "category": "Package Management",
+      "complexity": "low"
+    },
+    "sobelow-security": {
+      "command": "mix",
+      "args": ["sobelow"],
+      "env": {},
+      "description": "Security-focused static analysis for Phoenix applications",
+      "enabled": false,
+      "category": "Security",
+      "complexity": "medium",
+      "installation": "Add {:sobelow, \"~> 0.13\", only: [:dev, :test], runtime: false} to deps"
+    },
+    "ex-doc": {
+      "command": "mix",
+      "args": ["docs"],
+      "env": {},
+      "description": "Generate project documentation from code and @doc attributes",
+      "enabled": false,
+      "category": "Documentation",
+      "complexity": "low",
+      "installation": "Add {:ex_doc, \"~> 0.30\", only: :dev, runtime: false} to deps"
+    },
+    "test-watch": {
+      "command": "mix",
+      "args": ["test.watch"],
+      "env": {
+        "MIX_ENV": "test"
+      },
+      "description": "Run tests in watch mode for TDD workflow",
+      "enabled": false,
+      "category": "Testing",
+      "complexity": "low",
+      "installation": "Add {:mix_test_watch, \"~> 1.0\", only: [:dev, :test], runtime: false} to deps"
+    },
+    "benchee": {
+      "command": "mix",
+      "args": ["run", "bench/"],
+      "env": {},
+      "description": "Benchmarking tool for performance testing",
+      "enabled": false,
+      "category": "Performance",
+      "complexity": "medium",
+      "installation": "Add {:benchee, \"~> 1.0\", only: :dev} to deps"
+    }
+  },
+  "mcpIntegrations": {
+    "notes": {
+      "phoenixPatterns": [
+        "Use contexts to organize business logic",
+        "LiveView for real-time features without JavaScript",
+        "Ecto.Multi for database transactions",
+        "PubSub for inter-process communication",
+        "Supervisors for fault tolerance"
+      ],
+      "commonCommands": [
+        "mix phx.new - Create new Phoenix project",
+        "mix phx.gen.live - Generate LiveView CRUD",
+        "mix phx.gen.context - Generate context module",
+        "mix phx.gen.auth - Generate authentication",
+        "mix ecto.migrate - Run database migrations"
+      ]
+    }
+  }
+}
