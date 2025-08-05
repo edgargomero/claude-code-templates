@@ -1,0 +1,17 @@
+{
+  "name": "gemini-cli",
+  "version": "1.0.0",
+  "description": "A CLI to initialize Gemini configuration",
+  "main": "init.js",
+  "scripts": {
+    "start": "node -e \"require('./init.js').init()\""
+  },
+  "bin": {
+    "gemini": "./init.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^7.2.0"
+  }
+}
